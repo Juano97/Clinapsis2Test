@@ -1,5 +1,7 @@
-import * as React from "react"
+import * as React from "react";
+import { Link, navigate } from "gatsby";
+import Layout from "../components/Layout";
 
 export default function Home() {
-  return <div>Hello world!</div>
+  return navigate("/home");
 }

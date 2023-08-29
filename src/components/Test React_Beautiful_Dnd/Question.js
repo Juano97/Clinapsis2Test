@@ -56,11 +56,13 @@ const Item = styled.div`
   line-height: 1.5;
   border-radius: 3px;
   background: #fff;
-  border: 1px ${(props) => (props.isDragging ? "dashed #4099ff" : "solid #ddd")};
+  border: 1px ${(props) =>
+    props.isDragging ? "dashed #4099ff" : "solid #ddd"};
   width: 100%;
   resize: horizontal;
   overflow: auto;
   min-width: 200px;
+  width: 100%
   position: relative;
 `;
 
@@ -240,9 +242,6 @@ class App extends Component {
           )}
         </Droppable>
         <Content>
-          <Button onClick={this.addList}>
-            <ButtonText>Add List</ButtonText>
-          </Button>
           {Object.keys(this.state).map((list, i) => {
             console.log("==> list", list);
             return (

@@ -57,11 +57,6 @@ const Item = styled.div`
   border-radius: 3px;
   background: #fff;
   border: 1px ${(props) => (props.isDragging ? "dashed #4099ff" : "solid #ddd")};
-  width: 100%;
-  resize: horizontal;
-  overflow: auto;
-  min-width: 200px;
-  position: relative;
 `;
 
 const Clone = styled(Item)`
@@ -105,7 +100,6 @@ const Kiosk = styled(List)`
 const Container = styled(List)`
   margin: 0.5rem 0.5rem 1.5rem;
   background: #ccc;
-  max-width: 800px;
 `;
 
 const Notice = styled.div`
@@ -195,7 +189,7 @@ class App extends Component {
   };
 
   addQuestion = (e, list) => {
-    this.setState({ [list]: [uuid()] });
+    this.setState({ [list]: [{ id: uuid() }] });
   };
 
   render() {
@@ -235,7 +229,7 @@ class App extends Component {
                                   viewBox="0 0 24 24"
                                 ></svg>
                               </Handle>
-                              <a>List</a>
+                              <Question></Question>
                             </Item>
                           )}
                         </Draggable>

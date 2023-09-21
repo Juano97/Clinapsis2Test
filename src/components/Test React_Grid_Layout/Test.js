@@ -1,7 +1,18 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
-import { Box, Grid, CardActions } from "@mui/material";
+import {
+  Box,
+  Grid,
+  CardActions,
+  ToggleButtonGroup,
+  ToggleButton,
+  TextField,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import "./section.css";
 
 import { Responsive, WidthProvider } from "react-grid-layout";
@@ -44,6 +55,15 @@ class Section extends React.PureComponent {
         ],
   };
 
+  formtypes = ["text", "radio", "checkbox"];
+
+  form = localStorage.getItem("form-" + this.props.data)
+    ? JSON.parse(localStorage.getItem("form-" + this.props.data))
+    : {
+        0: { title: "", type: "text" },
+        1: { title: "", type: "radio", list: [] },
+      };
+
   handleLayoutChange = (layout, layouts) => {
     console.log(this.props);
     console.log(layout);
@@ -64,7 +84,7 @@ class Section extends React.PureComponent {
   };
 
   increaseHeight = (e) => {
-    const id = e.target.parentNode.id;
+    const id = e.target.parentNode.parentNode.parentNode.id;
     console.log(id);
     const { layout } = this.state;
     console.log(layout);
@@ -85,21 +105,22 @@ class Section extends React.PureComponent {
     );
   };
 
-  test = () => {
-    const { layout } = this.state;
-    const { layouts } = this.getLayouts();
-    console.log(layout);
-    console.log(layouts);
-  };
-
-  addNewItem = () => {
+  addNewItem = (e, _id) => {
     const { layout } = this.state;
     console.log(layout);
+    console.log(_id);
+    const id = _id;
+    console.log(id);
     var maxY = -1;
     var maxId = -1;
+    // for (let i = 0; i < layout.length; i++) {
+    //   console.log(layout[i]);
+    //   if (layout[i].y > maxY) maxY = layout[i].y;
+    //   if (parseInt(layout[i].i) > maxId) maxId = parseInt(layout[i].i);
+    // }
     for (let i = 0; i < layout.length; i++) {
       console.log(layout[i]);
-      if (layout[i].y > maxY) maxY = layout[i].y;
+      if (layout[i].i === id) maxY = layout[i].y;
       if (parseInt(layout[i].i) > maxId) maxId = parseInt(layout[i].i);
     }
     const newItem = {
@@ -109,19 +130,48 @@ class Section extends React.PureComponent {
       h: 1,
       i: 0,
     };
+
     console.log(layout);
     newItem.i = (maxId + 1).toString();
-    newItem.y = maxY + 1;
+    newItem.y = maxY;
     console.log(maxY);
     const _layout = layout.concat([newItem]);
+    this.form[maxId + 1] = { title: "", type: "text" };
     this.setState({ layout: _layout });
     localStorage.setItem(
       "section-layout-" + this.props.data,
       JSON.stringify(_layout)
     );
+    localStorage.setItem("form-" + this.props.data, JSON.stringify(this.form));
+    console.log(this.form);
   };
 
-  removeItem = () => {};
+  removeItem = (e, _id) => {
+    const id = _id;
+    const { layout } = this.state;
+    const form = this.form;
+    console.log(layout);
+    const _layout = [];
+    const _form = [];
+    for (let i = 0; i < layout.length; i++) {
+      if (layout[i].i == id) continue;
+      _layout[i] = layout[i];
+      _form[i] = form[i];
+    }
+    console.log(_layout);
+    this.setState({ layout: _layout });
+    this.form = _form;
+    localStorage.setItem(
+      "section-layout-" + this.props.data,
+      JSON.stringify(_layout)
+    );
+    localStorage.setItem("form-" + this.props.data, JSON.stringify(this.form));
+  };
+
+  handleTitleChange = (e, i) => {
+    console.log(e);
+    console.log(i);
+  };
 
   render() {
     return (
@@ -139,33 +189,81 @@ class Section extends React.PureComponent {
           isDroppable={true}
           onDropDragOver={console.log("a")}
           layouts={this.getLayouts()}
-          style={{ width: "100%" }}
+          style={{ width: "60%" }}
         >
           {this.state.layout.map((item) => (
-            <div
+            <Box
               id={item.i}
               key={item.i}
               data-grid={item}
-              style={{
-                display: "flex",
-                justifyContent: "center",
+              sx={{
+                "& .MuiToggleButtonGroup-root": {
+                  transition: "200ms ease",
+                  visibility: "hidden",
+                },
+                "&:hover .MuiToggleButtonGroup-root": {
+                  transition: "200ms ease",
+                  visibility: "visible",
+                },
               }}
             >
-              <Button
-                className="drag-handle"
+              <Box
+                container
                 style={{
-                  background: "grey",
-                  height: "30px",
+                  width: "100%",
+                  background: "white",
+                  border: "solid 1px grey",
+                  borderRadius: "20px",
                 }}
-              ></Button>
-              <Button
-                onClick={(e) => this.increaseHeight(e)}
-                draggable="false"
-                isdraggable="false"
               >
-                Increase Height
-              </Button>
-            </div>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button className="drag-handle">
+                    <DragIndicatorIcon
+                      sx={{ transform: "rotate(90deg)", color: "black" }}
+                    />
+                  </Button>
+                </Box>
+                <Box sx={{ padding: "10px" }}>
+                  <TextField
+                    id="standard-basic"
+                    label="Pregunta"
+                    variant="standard"
+                    onChange={(e) =>
+                      this.handleTitleChange(e.target.value, item.i)
+                    }
+                  />
+                  {this.form[item.i].type === "text" ? <></> : <></>}
+                </Box>
+              </Box>
+              <ToggleButtonGroup
+                orientation="vertical"
+                sx={{ display: "flex" }}
+              >
+                <ToggleButton
+                  sx={{ border: "none", flexGrow: "1" }}
+                  onClick={(e) => this.removeItem(e, item.i)}
+                >
+                  <DeleteIcon />
+                </ToggleButton>
+                <ToggleButton
+                  sx={{ border: "none", flexGrow: "1" }}
+                  onClick={(e) => this.addNewItem(e, item.i)}
+                >
+                  <AddCircleIcon />
+                </ToggleButton>
+                <ToggleButton
+                  sx={{ border: "none", flexGrow: "10", visibility: "hidden" }}
+                />
+                <ToggleButton sx={{ border: "none" }}>
+                  <AspectRatioIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
           ))}
         </ReactGridLayout>
       </div>

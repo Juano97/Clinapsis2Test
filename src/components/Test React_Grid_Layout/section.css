@@ -22,9 +22,7 @@ body {
 .react-grid-item {
   display: flex;
   left: 0px;
-  background-color: white;
-  border: solid 1px gray;
-  border-radius: 20px;
+  background-color: #ddd;
   position: relative;
 }
 
@@ -86,8 +84,9 @@ body {
 
 .react-grid-item > .react-resizable-handle {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 46px;
+  height: 46px;
+  opacity: 0;
 }
 
 .react-grid-item > .react-resizable-handle::after {

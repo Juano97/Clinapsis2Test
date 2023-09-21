@@ -1,4 +1,4 @@
-import { default as Test_Beau_Dnd } from "../../components/Test React_Beautiful_Dnd/Section";
+import { default as Test_Beau_Dnd } from "../../components/Test React_Beautiful_Dnd/Test";
 
 import React from "react";
 

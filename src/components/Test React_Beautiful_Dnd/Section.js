@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { default as Question } from "./Question";
 // import console = require('console');
-
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -44,6 +43,7 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 const Content = styled.div`
   margin-right: 200px;
+  max-width: 100%;
 `;
 
 const Item = styled.div`
@@ -57,6 +57,7 @@ const Item = styled.div`
   border-radius: 3px;
   background: #fff;
   border: 1px ${(props) => (props.isDragging ? "dashed #4099ff" : "solid #ddd")};
+  max-width: 100%;
 `;
 
 const Clone = styled(Item)`
@@ -87,14 +88,7 @@ const List = styled.div`
   border-radius: 3px;
   flex: 0 0 150px;
   font-family: sans-serif;
-`;
-
-const Kiosk = styled(List)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 200px;
+  max-width: 100%;
 `;
 
 const Container = styled(List)`
@@ -189,7 +183,15 @@ class App extends Component {
   };
 
   addQuestion = (e, list) => {
-    this.setState({ [list]: [{ id: uuid() }] });
+    var newList = this.state[list];
+    newList.push({ id: uuid() });
+    console.log(newList);
+    this.setState(
+      this.state[list].length
+        ? { [list]: newList }
+        : { [list]: [{ id: uuid() }] }
+    );
+    console.log(this.state[list]);
   };
 
   render() {

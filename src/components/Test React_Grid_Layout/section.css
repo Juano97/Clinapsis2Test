@@ -1,6 +1,10 @@
+html,
+body {
+  background: #ddd;
+}
+
 .layoutJSON {
   background: #ddd;
-  border: 1px solid black;
   margin-top: 10px;
 }
 
@@ -9,18 +13,18 @@
   align-self: center;
   display: flex;
   transition: height 200ms ease;
-  margin-top: 20px;
-  padding-top: 3px;
-  padding-bottom: 10px;
+  margin-top: 40px;
+  padding: 10px;
   width: 50%;
   background-color: #ddd;
 }
 
 .react-grid-item {
   display: flex;
-  left: -7px;
-  border: solid;
+  left: 0px;
   background-color: white;
+  border: solid 1px gray;
+  border-radius: 20px;
   position: relative;
 }
 
@@ -64,6 +68,10 @@
   visibility: hidden;
 }
 
+.react-grid-item.dragging {
+  visibility: hidden;
+}
+
 .react-grid-item.react-grid-placeholder {
   background: gray;
   opacity: 0.2;
@@ -86,12 +94,12 @@
   scroll-behavior: initial;
   content: "";
   position: absolute;
-  right: 3px;
-  bottom: 3px;
+  right: 6px;
+  bottom: 6px;
   width: 5px;
   height: 5px;
-  border-right: 2px solid white;
-  border-bottom: 2px solid white;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 .react-resizable-hide > .react-resizable-handle {

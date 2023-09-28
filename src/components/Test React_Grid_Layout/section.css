@@ -24,6 +24,7 @@ body {
   left: 0px;
   background-color: #ddd;
   position: relative;
+  border-radius: 20px;
 }
 
 .react-grid-item.resizing {
